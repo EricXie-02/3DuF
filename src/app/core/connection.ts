@@ -141,6 +141,15 @@ export default class Connection {
     }
 
     /**
+     * Returns the bounds of the connection
+     * 
+     * @memberof connection
+     * @returns {paper.Rectangle}
+     */
+    get Bounds(): any {
+        return this._bounds;
+    }
+    /**
      * Updates the parameters stored by the component
      * @param {String} key Identifier of the parameter
      * @param {any} value

@@ -147,6 +147,16 @@ export default class Component {
         this._params.updateParameter("xspan", bounds.width);
         this._params.updateParameter("yspan", bounds.height);
     }
+    
+    /**
+     * Returns the bounds of the component
+     * 
+     * @memberof connection
+     * @returns {paper.Rectangle}
+     */
+    get Bounds(): any {
+        return this._bounds;
+    }
 
     /**
      * Updates the parameters stored by the component

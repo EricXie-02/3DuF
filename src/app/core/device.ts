@@ -142,6 +142,7 @@ export default class Device {
     addComponent(component: Component): void {
         if (component instanceof Component) {
             this.__components.push(component);
+            //Check if component collides
         } else {
             throw new Error("Tried to add a component that isn't a component to the device");
         }
@@ -1131,5 +1132,44 @@ export default class Device {
 
     get textLayers(): Array<Layer> {
         return this.__textLayers;
+    }
+
+    /**
+     * This method is used to check if a component collides with any existing component
+     * or connection in the device
+     * 
+     * Assumes that bounds are set correctly
+     * 
+     * @param component 
+     * @returns {Boolean}
+     * @memberof Device
+     */
+    checkCollision(rec: Component):Boolean{
+        const components = this.components;
+        const connections = this.connections;
+
+        const rec1 = rec.Bounds;
+
+        let isCollision = false;
+        const componentCollisions: any[] = new Array();
+        const connectionCollisions : any[] = new Array();
+
+        for(const component of components){
+            const rec2 = component.Bounds();
+            if(rec1.intersects(rec2)){
+                isCollision = true;
+                componentCollisions.push(component);
+            }
+        }
+
+        for(const connection of connections){
+            const rec2 = connection.Bounds;
+            if(rec1.intersects(rec2)){
+                isCollision = true;
+                connectionCollisions.push(connection);
+            }
+        }
+
+        return isCollision;
     }
 }
