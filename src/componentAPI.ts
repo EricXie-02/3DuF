@@ -349,13 +349,15 @@ export class ComponentAPI {
         let ret = [];
         for (const key in ComponentAPI.library) {
             if (minttype === ComponentAPI.library[key].object.mint) {
-                ret.push(key);
+                 ret.push(key);
             }
         }
         if (ret.length > 0) {
             return ret;
         } else {
-            throw new Error("No render type found for mint type: " + minttype);
+            // Return the blackbox type keys, currently just flow
+            ret.push(this.blackboxEntryFlow.key);
+            return ret;
         }
     }
 
@@ -558,10 +560,11 @@ export class ComponentAPI {
       * @memberof ComponentAPI
       */
      static getBlackBoxDefinition(xspan: number, yspan: number, ports: Array<any>): LibraryEntryDefinition {
-        // TODO: Deal with the ports later
         // Create a fake definition for the blackbox
 
         // TODO: How to pass xspan, yspan, ports to the blackbox?
+        // Ans: Set the blackbox length and width params to xspan,yspan
+        // and ports should already be handled
         let definition = ComponentAPI.blackboxEntryFlow.object;
         let ret = {
             unique: definition.unique,

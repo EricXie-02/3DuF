@@ -629,7 +629,7 @@ export default class LoadUtils {
         }
 
         //Need to do this since component may not have length and width (probably need special name for them)
-        if(!iscustomcomponent){
+        if(iscustomcomponent){
             params.blackBoxLength = xspan;
             params.blackBoxWidth = yspan;
 

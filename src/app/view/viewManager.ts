@@ -200,8 +200,19 @@ export default class ViewManager {
      * @returns {void}
      */
     setNameMap(): void  {
+
+
+        /*
+        The name map here is used to keep track of the numbering of each of the components, connections and layers
+        It assumes that the incoming object is named in the format <name>_<number> and then it keeps track of the
+        highest number for each name. This is used to generate the next name when a new component, connection or layer.
+        */
         const newMap = new Map();
         for (let i = 0; i < this.currentDevice!.layers.length; i++) {
+            // Check if the layer first the pattern of <whatever>_<number> if not, then skip
+            if (!this.currentDevice!.layers[i].name.match(/.*_\d+/)) {
+                continue;
+            }
             const [nameStr, nameNum] = this.currentDevice!.layers[i].name.split("_");
             if (newMap.has(nameStr)) {
                 if (newMap.get(nameStr) < nameNum) newMap.set(nameStr, parseInt(nameNum));
@@ -210,6 +221,12 @@ export default class ViewManager {
             }
         }
         for (let i = 0; i < this.currentDevice!.connections.length; i++) {
+            console.log(i);
+            // Check if the connection first the pattern of <whatever>_<number> if not, then skip
+            console.log(this.currentDevice!.connections[i].name)
+            if (!this.currentDevice!.connections[i].name.match(/.*_\d+/)) {
+                continue;
+            }
             const [nameStr, nameNum] = this.currentDevice!.connections[i].name.split("_");
             if (newMap.has(nameStr)) {
                 if (newMap.get(nameStr) < nameNum) newMap.set(nameStr, parseInt(nameNum));
@@ -218,6 +235,10 @@ export default class ViewManager {
             }
         }
         for (let i = 0; i < this.currentDevice!.components.length; i++) {
+            // Check if the component first the pattern of <whatever>_<number> if not, then skip
+            if (!this.currentDevice!.components[i].name.match(/.*_\d+/)) {
+                continue;
+            }
             const [nameStr, nameNum] = this.currentDevice!.components[i].name.split("_");
             if (newMap.has(nameStr)) {
                 if (newMap.get(nameStr) < nameNum) newMap.set(nameStr, parseInt(nameNum));

@@ -11,6 +11,7 @@ import EventBus from "@/events/events";
 import RenderLayer from "../view/renderLayer";
 import { DFMType, ManufacturingInfo } from "../manufacturing/manufacturingInfo";
 import FeatureUtils from "@/app/utils/featureUtils";
+import BlackBox from "../library/blackBox";
 
 /**
  * Feature class
@@ -36,7 +37,7 @@ export default class Feature {
      * @param {} fabtype
      */
     constructor(type: string, params: Params, name: string, id: string = ComponentAPI.generateID(), fabtype: DFMType = DFMType.XY) {
-        this._type = type;
+        this._type = type; // (Eric) Can we change the type to bb if its not found in library, what is this?
         this._params = params;
         this._name = name;
         this._id = id;
@@ -49,18 +50,37 @@ export default class Feature {
         let modifierName: string;
         if (this.type == "Port") modifierName = "PORT";
         else modifierName = "COMPONENT";
-        console.log("rendName: ", tempRenderName);
-        console.log("z-offset-key: ", ComponentAPI.library[this.type].object.zOffsetKey(tempRenderName));
+
+        let tempZOffsetKey;
+        let tempDepth;
+        let tempSubstrateOffset;
+
+        console.log("type", this.type);
+
+        //(Eric) Does this look right? Why do we need tempRenderName here?
+        if(ComponentAPI.isCustomType(this.type)){
+            //This conditional is not working as intended
+            tempZOffsetKey = ComponentAPI.blackboxEntryFlow.object.zOffsetKey(tempRenderName);
+            tempDepth = this.getValue(ComponentAPI.blackboxEntryFlow.object.zOffsetKey(tempRenderName));
+            tempSubstrateOffset = ComponentAPI.blackboxEntryFlow.object.substrateOffset(tempRenderName);
+        }
+        else{
+            tempZOffsetKey = ComponentAPI.library[this.type].object.zOffsetKey(tempRenderName);
+            tempDepth = this.getValue(ComponentAPI.library[this.type].object.zOffsetKey(tempRenderName));
+            tempSubstrateOffset = ComponentAPI.library[this.type].object.substrateOffset(tempRenderName);
+        }
+
         this._manufacturingInfo = {
             fabtype: fabtype,
             layertype: null,
             rendername: tempRenderName,
-            z_offset_key: ComponentAPI.library[this.type].object.zOffsetKey(tempRenderName),
-            depth: this.getValue(ComponentAPI.library[this.type].object.zOffsetKey(tempRenderName)),
-            substrate_offset: ComponentAPI.library[this.type].object.substrateOffset(tempRenderName),
+            z_offset_key: tempZOffsetKey,
+            depth: tempDepth,
+            substrate_offset: tempSubstrateOffset,
             substrate: null,
             modifier: modifierName
         };
+
     }
 
     get id(): string {
@@ -362,7 +382,8 @@ export default class Feature {
 
     deriveRenderName(): string {
         if (!ComponentAPI.library[this.type]) {
-            console.error("Type unrecognized, defaulting to template.");
+            // (Eric) Is this right
+            return ComponentAPI.blackboxEntryFlow.key;
         }
         return ComponentAPI.library[this.type].key;
     }
