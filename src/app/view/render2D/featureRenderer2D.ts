@@ -131,7 +131,6 @@ export function renderFeature(feature: Feature, key: string | null) {
     const type = feature.getType();
     let set = "Basic";
     if (ComponentAPI.isCustomType(type)) {
-        //(Eric) all blackbox code should be in here
         set = "Custom";
         rendered = DXFSolidObjectRenderer2D.renderCustomComponentFeature(feature, getBaseColor(feature));
         let modrendered = rendered as any;
