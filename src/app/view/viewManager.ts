@@ -961,6 +961,13 @@ export default class ViewManager {
         const version = json.version;
 
         if (version === null || undefined === version || version === "1" || version == "1.1" || version == "1.2") {
+
+            //Create copy of json
+            //Change unknown components to entity of black box
+            //If changes, delete renderlayers and clear features from layers
+
+            
+
             const ret = LoadUtils.loadFromScratch(json);
             device = ret[0];
             Registry.currentDevice = device;

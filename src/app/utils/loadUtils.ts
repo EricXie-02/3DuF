@@ -563,6 +563,7 @@ export default class LoadUtils {
      */
     static loadComponentFromInterchangeV1(json: ComponentInterchangeV1): Component {
         const iscustomcompnent = false;
+        console.log("HIII", json)
         const name = json.name;
         const id = json.id;
         const entity = json.entity;
