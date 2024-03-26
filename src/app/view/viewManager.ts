@@ -960,12 +960,16 @@ export default class ViewManager {
         // its going the be the legacy format, else it'll be a new format
         const version = json.version;
 
+            //Preprocess the json to display black box components
+            //by changing unknown mint entities with black box
+
+            for(let i=0; i<json.components.length; i++){
+                if(ComponentAPI.getComponentWithMINT(json.components[i].entity) == null){
+                    json.components[i].entity = "BLACK BOX"
+                }
+            }
+
         if (version === null || undefined === version || version === "1" || version == "1.1" || version == "1.2") {
-
-            //Create copy of json
-            //Change unknown components to entity of black box
-            //If changes, delete renderlayers and clear features from layers
-
             
 
             const ret = LoadUtils.loadFromScratch(json);
