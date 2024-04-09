@@ -963,9 +963,16 @@ export default class ViewManager {
             //Preprocess the json to display black box components
             //by changing unknown mint entities with black box
 
+            //TODO delete the render layers if exists and we find unknown component
+
+            let flag = false;
+
             for(let i=0; i<json.components.length; i++){
                 if(ComponentAPI.getComponentWithMINT(json.components[i].entity) == null){
                     json.components[i].entity = "BLACK BOX"
+                    json.components[i].params["width"] = json.components[i]["x-span"]
+                    json.components[i].params["length"] = json.components[i]["y-span"]
+                    flag = true;
                 }
             }
 
