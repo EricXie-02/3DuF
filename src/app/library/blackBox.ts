@@ -90,7 +90,8 @@ export default class BlackBox extends Template {
 
         const ports = [];
 
-        ports.push(new ComponentPort(-w, -l, "1", LogicalLayerType.FLOW));
+        ports.push(new ComponentPort(0, l/2, "1", LogicalLayerType.FLOW));
+        ports.push(new ComponentPort(w, l/2, "2", LogicalLayerType.FLOW));
 
         return ports;
     }
